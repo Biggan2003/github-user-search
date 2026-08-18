@@ -1,6 +1,10 @@
 // GitHubRepository type import করছি.
 // এতে repository data type-safe থাকবে.
 import type { GitHubRepository } from "../types/github";
+import {
+    createIcons,
+    GitFork
+} from "lucide";
 
 
 // Repository list তৈরি করার function.
@@ -90,8 +94,9 @@ export function createRepositoryList(
         // Forks.
         const forks = document.createElement("span");
 
-        forks.textContent =
-            `🍴 ${repository.forks_count}`;
+        forks.innerHTML =
+            `<i data-lucide="git-fork"></i>
+            ${repository.forks_count}`;
 
 
         // Meta information card-এ যোগ করছি.
@@ -108,6 +113,12 @@ export function createRepositoryList(
 
         // Main repository container-এ card যোগ করছি.
         container.appendChild(card);
+    });
+
+    createIcons({
+        icons: {
+            GitFork
+        }
     });
 
 

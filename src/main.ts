@@ -4,6 +4,15 @@ import {
     getRepositories
 } from "./api/github";
 
+import {
+    createIcons,
+    MapPin,
+    Building2,
+    CalendarDays,
+    RefreshCw,
+    GitFork
+} from "lucide";
+
 import { createRepositoryList } from "./components/RepositoryList";
 
 // Search form component import করছি.
@@ -93,6 +102,18 @@ async function handleSearch(username: string): Promise<void> {
         // Profile browser-এ display করছি.
         result.appendChild(profile);
 
+        // Profile DOM-এর মধ্যে আসার পর
+        // Lucide icons render করছি.
+        createIcons({
+            icons: {
+                MapPin,
+                Building2,
+                CalendarDays,
+                RefreshCw,
+                GitFork
+            }
+        })
+
         // User-এর repositories fetch করছি.
         const repositories = await getRepositories(username);
 
@@ -103,6 +124,12 @@ async function handleSearch(username: string): Promise<void> {
 
         // Repository list display করছি.
         result.appendChild(repositoryList);
+
+        createIcons({
+            icons: {
+                GitFork
+            }
+        });
 
 
     } catch (err) {
@@ -153,3 +180,25 @@ container.appendChild(result);
 
 // Main container #app-এর মধ্যে যোগ করছি.
 app.appendChild(container);
+
+
+
+// Creator information
+const creator = document.createElement("p");
+
+creator.className = "creator";
+
+creator.innerHTML = `
+    Developed by
+    <a
+        href="https://www.linkedin.com/in/g-m-biggan-371956305/"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Biggan
+    </a>
+`;
+
+
+// Creator information page-এর শেষে যোগ করছি.
+container.appendChild(creator);

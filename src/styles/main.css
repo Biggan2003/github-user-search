@@ -7,20 +7,20 @@
 /* ---------- Global Variables ---------- */
 
 :root {
-    --bg: #f6f8fa;
-    --card: #ffffff;
+    --bg: #91bce8;
+    --card: #93c4d4;
 
-    --text: #24292f;
-    --muted: #57606a;
+    --text: #040505;
+    --muted: #030303;
 
-    --border: #d0d7de;
+    --border: #7d98b4;
 
-    --primary: #24292f;
-    --primary-hover: #424a53;
+    --primary: #2d6edf;
+    --primary-hover: #0a0b0c;
 
     --link: #0969da;
 
-    --danger-bg: #ffebe9;
+    --danger-bg: #fbddda;
     --danger-text: #cf222e;
 
     --shadow:
@@ -173,7 +173,7 @@ h1 {
 /* Placeholder */
 
 #username::placeholder {
-    color: #8c959f;
+    color: #9ba0a5;
 }
 
 
@@ -270,7 +270,7 @@ button:active {
     border: 1px solid var(--border);
     border-radius: 14px;
 
-    background: #ffffff;
+    background: #daf7fbeb;
 
     text-align: center;
 
@@ -592,3 +592,40 @@ button:active {
 
     font-size: 13px;
 }
+
+
+[data-lucide] {
+    width: 16px;
+    height: 16px;
+
+    vertical-align: -3px;
+
+    margin-right: 5px;
+
+    stroke-width: 2;
+}
+
+
+.creator {
+    margin-top: 30px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.creator a {
+    color: var(--link);
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.creator a:hover {
+    text-decoration: underline;
+}
+
+

@@ -5,6 +5,7 @@ import type { GitHubUser } from "../types/github";
 import { formatDate } from "../utils/formatDate";
 
 
+
 // GitHub user-এর complete profile card তৈরি করার function.
 export function createUserProfile(
     user: GitHubUser
@@ -52,7 +53,10 @@ export function createUserProfile(
     const location = document.createElement("p");
 
     location.innerHTML = `
-        <strong> Location:</strong>
+        <strong>
+            <i data-lucide="map-pin"></i>
+            Location:
+        </strong>
         ${user.location ?? "Not available"}
     `;
 
@@ -61,7 +65,10 @@ export function createUserProfile(
     const company = document.createElement("p");
 
     company.innerHTML = `
-        <strong>🏢 Company:</strong>
+        <strong>
+            <i data-lucide="building-2"></i>
+            Company:
+        </strong>
         ${user.company ?? "Not available"}
     `;
 
@@ -69,7 +76,10 @@ export function createUserProfile(
     const createdAt = document.createElement("p");
 
     createdAt.innerHTML = `
-        <strong>📅 Joined:</strong>
+        <strong>
+            <i data-lucide="calendar-days"></i>
+            Joined:
+        </strong>
         ${formatDate(user.created_at)}
     `;
 
@@ -78,7 +88,10 @@ export function createUserProfile(
     const updatedAt = document.createElement("p");
 
     updatedAt.innerHTML = `
-        <strong>🔄 Updated:</strong>
+        <strong>
+            <i data-lucide="refresh-cw"></i>
+            Updated:
+        </strong>
         ${formatDate(user.updated_at)}
     `;
 
@@ -156,6 +169,10 @@ export function createUserProfile(
 
     card.appendChild(stats);
     card.appendChild(profileLink);
+
+
+
+   
 
 
     // সম্পূর্ণ profile card return করছি.
