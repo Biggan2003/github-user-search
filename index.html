@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
@@ -13,117 +12,11 @@
 
     <title>GitHub User Search</title>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        #loading {
-            text-align: center;
-        }
-
-        #error {
-            color: rgb(231, 94, 94);
-            text-align: center;
-            font-weight: bold;
-        }
-
-        #result {
-            margin-top: 20px;
-        }
-
-        .user-card {
-            border: 1px solid #060606;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-        }
-
-    </style>
-
 </head>
-
 
 <body>
 
-
-    <h1>GitHub User Search</h1>
-
-
-    <!--
-        User এখানে GitHub username লিখবে.
-    -->
-
-    <form id="search-form">
-
-        <input
-            id="username"
-            type="text"
-            placeholder="Enter GitHub username"
-        >
-
-        <button type="submit">
-            Search
-        </button>
-
-    </form>
-
-
-    <!--
-        API request চলার সময় এখানে Loading দেখাবে.
-    -->
-
-    <p id="loading"></p>
-
-
-    <!--
-        API error হলে এখানে error message দেখাবে.
-    -->
-
-    <p id="error"></p>
-
-
-    <!--
-        GitHub user-এর information এখানে display হবে.
-    -->
-
-    <div id="result"></div>
-
-
-    <!--
-        আমাদের TypeScript file load করছি.
-    -->
+    <div id="app"></div>
 
     <script
         type="module"

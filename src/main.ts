@@ -1,109 +1,81 @@
-// GitHub API থেকে আমরা যেসব user information ব্যবহার করব,
-// সেগুলোর structure TypeScript-কে জানাচ্ছি.
-import "./style.css";
-interface GitHubUser {
-    login: string;
-    avatar_url: string;
-    name: string | null;
-    bio: string | null;
-}
+// GitHub API function import করছি.
+import {
+    getUser,
+    getRepositories
+} from "./api/github";
+
+import { createRepositoryList } from "./components/RepositoryList";
+
+// Search form component import করছি.
+import { createSearchForm } from "./components/SearchForm";
+
+// User profile component import করছি.
+import { createUserProfile } from "./components/UserProfile";
+
+// Main CSS import করছি.
+import "./styles/main.css";
 
 
-// GitHub API থেকে username অনুযায়ী user data fetch করার function.
-async function getUser(username: string): Promise<GitHubUser> {
-
-    // GitHub-এর official "Get a user" endpoint.
-    // Endpoint: GET /users/{username}
-    const response = await fetch(
-        `https://api.github.com/users/${username}`,
-        {
-            // GitHub documentation অনুযায়ী recommended header.
-            headers: {
-                "Accept": "application/vnd.github+json",
-
-                // GitHub API version specified in your documentation.
-                "X-GitHub-Api-Version": "2026-03-10"
-            }
-        }
-    );
+// HTML-এর #app container ধরছি.
+const app = document.querySelector<HTMLDivElement>("#app")!;
 
 
-    // fetch() 404 বা 500-এর মতো HTTP response-এর জন্য
-    // automatically error throw করে না.
-    // তাই response.ok manually check করছি.
-    if (!response.ok) {
+// ========================================
+// Page Layout
+// ========================================
 
-        // Username না পাওয়া গেলে GitHub 404 দেয়.
-        if (response.status === 404) {
-            throw new Error("User not found");
-        }
+// Main container তৈরি করছি.
+const container = document.createElement("div");
 
-        // অন্য কোনো HTTP error হলে status দেখাব.
-        throw new Error(`HTTP ${response.status}`);
-    }
+container.className = "container";
 
 
-    // API response-এর JSON data return করছি.
-    return response.json() as Promise<GitHubUser>;
-}
+// Page heading.
+const title = document.createElement("h1");
+
+title.textContent = "GitHub User Details Search";
 
 
-// HTML-এর form element ধরছি.
-const form = document.querySelector<HTMLFormElement>(
-    "#search-form"
-)!;
+// Subtitle.
+const subtitle = document.createElement("p");
+
+subtitle.className = "subtitle";
+
+subtitle.textContent =
+    "Search for any public GitHub user";
 
 
-// Username input element ধরছি.
-const usernameInput = document.querySelector<HTMLInputElement>(
-    "#username"
-)!;
+// Loading message.
+const loading = document.createElement("p");
+
+loading.id = "loading";
 
 
-// Loading message দেখানোর element.
-const loading = document.querySelector<HTMLParagraphElement>(
-    "#loading"
-)!;
+// Error message.
+const error = document.createElement("p");
+
+error.id = "error";
 
 
-// Error message দেখানোর element.
-const errorMessage = document.querySelector<HTMLParagraphElement>(
-    "#error"
-)!;
+// User profile result container.
+const result = document.createElement("div");
+
+result.id = "result";
 
 
-// User information দেখানোর element.
-const result = document.querySelector<HTMLDivElement>(
-    "#result"
-)!;
+// ========================================
+// Search Function
+// ========================================
 
-
-// Form submit হলে এই function চলবে.
-form.addEventListener("submit", async (event) => {
-
-    // Form submit করলে browser যেন page reload না করে.
-    event.preventDefault();
-
+// Search button চাপলে এই function execute হবে.
+async function handleSearch(username: string): Promise<void> {
 
     // আগের result এবং error পরিষ্কার করছি.
     result.innerHTML = "";
-    errorMessage.textContent = "";
+    error.textContent = "";
 
 
-    // Input থেকে username নিচ্ছি.
-    const username = usernameInput.value.trim();
-
-
-    // Username না দিলে error দেখাব.
-    if (!username) {
-        errorMessage.textContent =
-            "Please enter a GitHub username.";
-
-        return;
-    }
-
-
-    // API request চলার সময় Loading দেখাব.
+    // API request চলার সময় Loading দেখাচ্ছি.
     loading.textContent = "Loading...";
 
 
@@ -113,44 +85,71 @@ form.addEventListener("submit", async (event) => {
         const user = await getUser(username);
 
 
-        // API থেকে পাওয়া data UI-তে display করছি.
-        result.innerHTML = `
-            <div class="user-card">
+        // API থেকে পাওয়া user data দিয়ে
+        // profile component তৈরি করছি.
+        const profile = createUserProfile(user);
 
-                <img
-                    src="${user.avatar_url}"
-                    alt="${user.login}"
-                    class="avatar"
-                />
 
-                <h2>${user.name ?? user.login}</h2>
+        // Profile browser-এ display করছি.
+        result.appendChild(profile);
 
-                <p>
-                    <strong>Username:</strong>
-                    @${user.login}
-                </p>
+        // User-এর repositories fetch করছি.
+        const repositories = await getRepositories(username);
 
-                <p>
-                    <strong>Bio:</strong>
-                    ${user.bio ?? "No bio available"}
-                </p>
+        // Repository list তৈরি করছি.
+        const repositoryList =
+            createRepositoryList(repositories);
 
-            </div>
-        `;
 
-    } catch (error) {
+        // Repository list display করছি.
+        result.appendChild(repositoryList);
 
-        // কোনো error হলে সেটা handle করছি.
-        if (error instanceof Error) {
-            errorMessage.textContent = error.message;
+
+    } catch (err) {
+
+        // Error হলে error message দেখাচ্ছি.
+        if (err instanceof Error) {
+
+            error.textContent = err.message;
+
         } else {
-            errorMessage.textContent =
+
+            error.textContent =
                 "Something went wrong.";
+
         }
 
     } finally {
 
-        // Request শেষ হলে Loading message সরিয়ে দেব.
+        // API request শেষ হলে Loading message সরিয়ে দিচ্ছি.
         loading.textContent = "";
     }
+}
+
+
+// ========================================
+// Search Form
+// ========================================
+
+// Search form তৈরি করছি.
+// Search করলে handleSearch() function call হবে.
+const searchForm = createSearchForm({
+    onSearch: handleSearch
 });
+
+
+// ========================================
+// Build the Page
+// ========================================
+
+// সব elements main container-এ যোগ করছি.
+container.appendChild(title);
+container.appendChild(subtitle);
+container.appendChild(searchForm);
+container.appendChild(loading);
+container.appendChild(error);
+container.appendChild(result);
+
+
+// Main container #app-এর মধ্যে যোগ করছি.
+app.appendChild(container);
