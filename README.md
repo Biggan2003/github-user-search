@@ -5,6 +5,7 @@ A professional GitHub User Search and Profile Explorer built with **TypeScript, 
 The application allows users to search for any public GitHub user and view their profile information, GitHub statistics, and public repositories through a clean and responsive interface.
 
 ---
+## Live Link: https://github-user-details-biggan.netlify.app/
 
 ## How It Works
 
